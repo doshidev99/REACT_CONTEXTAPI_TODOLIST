@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { Context, ContextProvider } from './context';
+import { Form, Tasks } from './components';
+
+const App = () => {
+  const initialState = useContext(Context);
+  // const [state, setState] = useState(initialState);
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  console.log('this.state .....', state);
+
+  return (
+    <ContextProvider value={initialState}>
+      
+      <div className="App">
+        <Form />
+        <Tasks />
+      </div>
+    </ContextProvider>
+  );
+};
+
+export default App;
 
 ReactDOM.render(<App />, document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
