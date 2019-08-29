@@ -1,11 +1,53 @@
 import React, { useContext } from 'react';
 import { Context } from '../../context';
+// import { reducer } from '../../reducers';
 
 const Tasks = () => {
-  const initialState = useContext(Context);
-  console.log('initialState >>', initialState);
+  const { state, dispatch } = useContext(Context);
+  const { tasks } = state;
 
-  return (  
+  const onDelete = id => {
+    dispatch({ type: 'ON_DELETE', payload: id });
+  };
+
+  const onUpdateStatus = (id) => {
+    dispatch({ type: 'ON_UPDATE_STATUS', payload: id });
+    console.log(tasks);
+    
+  };
+
+  const elmTasks = tasks.map((task, index) => (
+    <tr key={Date.now() + Math.random()}>
+      <td>{index + 1}</td>
+      <td>{task.name} </td>
+      <td className="text-center">
+        <span
+          onClick={() => onUpdateStatus(task.id)}
+          className={
+            task.status
+              ? 'badge badge-pill  badge-success'
+              : 'badge badge-pill  badge-danger'
+          }
+        >
+          {task.status ? 'Active' : 'Hidden'}
+        </span>
+      </td>
+      <td className="text-center">
+        <button type="button" className="btn btn-warning">
+          Edit
+        </button>
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={() => onDelete(task.id)}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ));
+
+  return (
     <div className="col-12 mt-2">
       <div className="row mt-15">
         <div className="col-8">
@@ -50,22 +92,7 @@ const Tasks = () => {
                 </td>
                 <td />
               </tr>
-              <tr>
-                <td>x</td>
-                <td>x</td>
-                <td className="text-center">
-                  <span>Active</span>
-                </td>
-                <td className="text-center">
-                  <button type="button" className="btn btn-warning">
-                    Edit
-                  </button>
-                  &nbsp;
-                  <button type="button" className="btn">
-                    Delete
-                  </button>
-                </td>
-              </tr>
+              {elmTasks}
             </tbody>
           </table>
         </div>
